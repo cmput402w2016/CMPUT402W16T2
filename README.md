@@ -5,11 +5,9 @@ Members: Xiaohui Ma, Troy Murphy
 
 This part of project is to use OpenCV to process traffic cameras videos from the City of Edmonton and identify the traffic volume and speed. The output data will then be passed into the database that Team 1 has created.
 
----
 # Usage
 To be added.
 
----
 # License
   Copyright 2016 Xiaohui Ma, Troy Murphy
 
