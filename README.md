@@ -1,12 +1,10 @@
 # CMPUT402W16T2
 University of Alberta CMPUT 402 Winter 2016 Project Group 2.
 
-Members: Xiaohui Ma, Troy Murphy
-
-This part of project is to use OpenCV to process traffic cameras videos from the City of Edmonton and identify the traffic volume and speed. The output data will then be passed into the database that Team 1 has created.
-
-# Usage
-To be added.
+##Team
+Xiaohui Ma, Troy Murphy
+##Overview
+A Python 2.7 and OpenCV program to process video files from traffic cameras located through the City of Edmonton to identify the traffic volumes and velocities. The output data is posted to the database created by Team 1.
 
 # License
   Copyright 2016 Xiaohui Ma, Troy Murphy
