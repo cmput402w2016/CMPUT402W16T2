@@ -4,7 +4,7 @@ import numpy as np
 import cv2
 
 # TODO: remove hard coded file name
-cap = cv2.VideoCapture('sample_video_2.mp4')
+cap = cv2.VideoCapture('videos/sample_video_2.mp4')
 
 # Here are the 3 ways of background subtraction
 # createBackgroundSubtractorMOG2 seems to give the best result. Need more testing.
