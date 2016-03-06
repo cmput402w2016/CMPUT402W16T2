@@ -1,11 +1,16 @@
 # Reference: http://docs.opencv.org/master/db/d5c/tutorial_py_bg_subtraction.html
 # requires opencv v3.1.0
 
+import argparse
 import numpy as np
 import cv2
 
-# TODO: remove hard coded file name
-cap = cv2.VideoCapture('videos/sample_video_2.mp4')
+# construct the argument parser and parse the arguments
+ap = argparse.ArgumentParser()
+ap.add_argument("-v", "--video", type=str, help="path to the video file", required=True)
+args = vars(ap.parse_args())
+
+cap = cv2.VideoCapture(args['video'])
 
 # Here are the 3 ways of background subtraction
 # createBackgroundSubtractorMOG2 seems to give the best result. Need more testing.
