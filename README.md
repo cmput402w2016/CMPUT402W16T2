@@ -10,6 +10,9 @@ A Python 2.7 and OpenCV program to process video files from traffic cameras loca
   * Python 2.7
   * OpenCV 2.4
 
+# Usage
+python main.py -v path/to/file
+
 # License
   Copyright 2016 Xiaohui Ma, Troy Murphy
 
