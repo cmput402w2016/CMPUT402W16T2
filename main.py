@@ -1,6 +1,3 @@
-# Reference: http://docs.opencv.org/master/db/d5c/tutorial_py_bg_subtraction.html
-# requires opencv v2.4
-
 import argparse
 import numpy as np
 import cv2
@@ -14,6 +11,8 @@ args = vars(ap.parse_args())
 cap = cv2.VideoCapture(args["video"])
 
 firstFrame = None
+
+# The two points for drawing the line
 (pt1, pt2) = ((110,320), (460,220))
 
 while(1):
@@ -37,7 +36,7 @@ while(1):
 
     for cnt in contours:
         area = cv2.contourArea(cnt)
-        if area > 500:
+        if area > 0:
             (x, y, w, h) = cv2.boundingRect(cnt)
             cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
