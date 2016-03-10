@@ -5,16 +5,16 @@ import numpy as np
 import cv2
 import imutils
 
-#construct the argument parser and parse the arguments
+# construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-v", "--video", type=str, help="path to the video file", required=True)
 args = vars(ap.parse_args())
- 
+
 cap = cv2.VideoCapture(args["video"])
 
 # Here are the 2 ways of background subtraction
-fgbg = cv2.BackgroundSubtractorMOG2()
-
+fgbg = cv2.BackgroundSubtractorMOG()
+#fgbg = cv2.BackgroundSubtractorMOG2()
 
 # The two points for drawing the line
 #(pt1, pt2) = ((110,320), (460,220))
