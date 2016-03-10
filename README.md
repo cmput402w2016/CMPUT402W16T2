@@ -6,6 +6,13 @@ Xiaohui Ma, Troy Murphy
 ##Overview
 A Python 2.7 and OpenCV program to process video files from traffic cameras located through the City of Edmonton to identify the traffic volumes and velocities. The output data is posted to the database created by Team 1.
 
+<<<<<<< HEAD
+=======
+# Requirement
+  * Python 2.7
+  * OpenCV 2.4
+
+>>>>>>> 76c3cc06382ae247a174fd297cc4da7d2900e0d2
 # License
   Copyright 2016 Xiaohui Ma, Troy Murphy
 

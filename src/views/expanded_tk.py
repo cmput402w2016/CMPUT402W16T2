@@ -34,7 +34,6 @@ class TkWindowViewer:
         self.remote_frame = None
         self.play_stop_string = tk.StringVar()
         #initialize other variables
-        
         self._buildWindow()
         self._buildMenu()
         
@@ -43,24 +42,28 @@ class TkWindowViewer:
         
     def setDisplayImg(self, imgarray):
         #convert img into TkPhoto object
-        im = Image.fromArray(imgarray)
+        im = Image.fromarray(imgarray)
         imgtk = ImageTk.PhotoImage(image=im)
         #put in display window
-        self.video_frame.setvar(image, imagetk)
-        
+        self.video_frame.configure(image = imgtk)
+        self.video_frame.image = imgtk
         
     def _buildWindow(self):
-        self.video_frame = tk.LabelFrame(master = self.root, text="Video Feed", labelanchor=tk.N, width=800, height=450,bg="grey")
+        self.video_frame = tk.Label(master = self.root, text="Video Feed", width=800, height=450,bg="grey",image=None)
         self.video_frame.grid_propagate(0)
+        #initialize a reference to an image file. Needs to be updated each time it is changed
+        self.video_frame.image = None
+        
         self.log_frame = tk.LabelFrame(master=self.root, text="Log", labelanchor=tk.N, width=400, height=550,bg="white")
         self.log_frame.grid_propagate(0)
         self.remote_frame = tk.Frame(master=self.root, width=800,height=100, bg="white")
         self.remote_frame.grid_propagate(0)
         self.open_file_button = tk.Button(master=self.remote_frame, textvariable=self.play_stop_string, width=50,height=15)
-        self.open_file_button.grid(row=0,column=1, sticky=tk.N)
+        self.open_file_button.grid(row=0,column=1, sticky=tk.NE)
         
         self.video_frame.grid(row=0,column=0)
-        self.remote_frame.grid(row=2,column=0)
+        
+        self.remote_frame.grid(row=1,column=0)
         self.log_frame.grid(row=0,column=1,rowspan=2)
     
     def setplay(self,func):

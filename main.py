@@ -1,5 +1,7 @@
 # This version uses first frame as a reference and then cv2.absdiff(firstFrame, gray)
 # to find the difference.
+# Reference: http://docs.opencv.org/master/db/d5c/tutorial_py_bg_subtraction.html
+# requires opencv v2.4
 
 import argparse
 import numpy as np
@@ -19,19 +21,24 @@ firstFrame = None
 # (pt1, pt2) = ((110,320), (460,220))
 min_area = 200
 
-while(1):
+(pt1, pt2) = ((110,320), (460,220))
 
+
+while(1):
     # read the frames
     _,frame = cap.read()
-
     # resize the frame to width of 500px
     frame = imutils.resize(frame, width=500)
-
     # convert frame to gray color and blur it
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     gray = cv2.GaussianBlur(gray, (21, 21), 0)
 
     # check if current frame is the first one
+
+    frame = imutils.resize(frame, width=500)
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    gray = cv2.GaussianBlur(gray, (31, 31), 0)
+
     if firstFrame is None:
 		firstFrame = gray
 		continue
