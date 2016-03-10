@@ -12,8 +12,14 @@ class VideoController:
         self.running_average = 0
         self.fgbg = cv2.BackgroundSubtractorMOG2()
         
-    def runInfinite(self):
-        pass
+    def runInfinite(self,tkroot):
+        while(True):
+            try:
+                (frame,count) = self.runIteration()
+                tkroot.setDisplayImg(frame)
+                tkroot.runUpdate()
+            except:
+                break
         
     def runInterval(self):
         pass
@@ -45,8 +51,7 @@ class VideoController:
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
                 count += 1
     
-        cv2.putText(frame,"Count: %d" % count,(10,20), cv2.FONT_HERSHEY_SIMPLEX, 0.5,(0,0,255),2)
-    
+       
         # Display the current number of vehicles
         cv2.putText(frame,"Count: %d" % count,(10,20), cv2.FONT_HERSHEY_SIMPLEX, 0.5,(0,0,255),2)
 
