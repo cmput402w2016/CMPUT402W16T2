@@ -1,3 +1,4 @@
 *.pyc
 videos/*
 .DS_Store
+log/*
