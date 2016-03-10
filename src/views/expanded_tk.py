@@ -39,14 +39,25 @@ class TkWindowViewer:
         
     def runMainloop(self):
         self.root.mainloop()
+    
+    def runUpdate(self):
+        self.root.update()    
         
-    def setDisplayImg(self, imgarray):
+    def setDisplayImg(self, imgarray=None):
         #convert img into TkPhoto object
-        im = Image.fromarray(imgarray)
-        imgtk = ImageTk.PhotoImage(image=im)
-        #put in display window
-        self.video_frame.configure(image = imgtk)
-        self.video_frame.image = imgtk
+        if imgarray is not None:
+            im = Image.fromarray(imgarray)
+            imgtk = ImageTk.PhotoImage(image=im)
+            #put in display window
+            self.video_frame.configure(image = imgtk)
+            self.video_frame.image = imgtk
+        else:
+            self.video_frame.configure(image=None)
+            self.video_frame.image = None
+ 
+    def setplay(self,func):
+        self.open_file_button.configure(command=func)
+ 
         
     def _buildWindow(self):
         self.video_frame = tk.Label(master = self.root, text="Video Feed", width=800, height=450,bg="grey",image=None)
@@ -66,8 +77,6 @@ class TkWindowViewer:
         self.remote_frame.grid(row=1,column=0)
         self.log_frame.grid(row=0,column=1,rowspan=2)
     
-    def setplay(self,func):
-        self.open_file_button.setvar('command', func)
         
     def _buildMenu(self):
         filemenu = tk.Menu(self.menubar, tearoff=0)

@@ -26,9 +26,9 @@ def main():
     lc = LogController()
 
     (frame, count) = vc.runIteration()
-
     maintk.setDisplayImg(frame)
 
+    maintk.setplay(lambda: vc.runInfinite(maintk))
     maintk.runMainloop()
 
 if __name__ == "__main__":
