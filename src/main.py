@@ -5,6 +5,7 @@ import argparse
 from views.expanded_tk import TkWindowViewer
 from controllers.videocontroller import VideoController
 from controllers.logcontroller import LogController
+import datetime
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
@@ -26,9 +27,7 @@ def run_gui():
     maintk = TkWindowViewer()
     #maintk.setbuttontext(PLAY_STRING())
             
-    #lc = LogController()
     maintk.runMainloop()
-
 
 def run_cli():
     pass

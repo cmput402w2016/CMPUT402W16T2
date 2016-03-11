@@ -1,7 +1,12 @@
-import cv2
 import time
+import datetime
+
+import cv2
 import imutils
 import numpy
+
+from src.controllers.logcontroller import LogController
+
 
 TIME_INTERVAL = 10
 MIN_AREA = 500
@@ -10,12 +15,23 @@ class VideoController:
     def __init__(self, video_path):
         self.capture = cv2.VideoCapture(video_path)
         self.running_average = 0
+        #self.lc = LogController()
         self.fgbg = cv2.BackgroundSubtractorMOG()
         
     def runInfinite(self,tkroot):
+        """
+        A function that can take a TkHelperWindow and send
+        it processed frames to display. The infinite loop is
+        killed by the play button within the gui or EOF 
+        """
         while(True):
             try:
                 (frame,count) = self.runIteration()
+                
+                # ToDo: fix this to 
+                #self.lc.writeToLog(str(datetime.datetime.now()),count)
+                
+                
                 tkroot.setDisplayImg(frame)
                 #retrieve pause signal from button press in tk
                 play = tkroot.runUpdate()
@@ -52,7 +68,7 @@ class VideoController:
                 (x, y, w, h) = cv2.boundingRect(cnt)
                 cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
                 count += 1
-        cv2.imshow('thresh',thresh)
+        #cv2.imshow('thresh',thresh)
         
         cv2.putText(frame,"Count: %d" % count,(10,20), cv2.FONT_HERSHEY_SIMPLEX, 0.5,(0,0,255),2)
 

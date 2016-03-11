@@ -1,11 +1,15 @@
 import json
 import datetime
+import os.path
 
 class LogController:
     def __init__(self):
-        self.filename = 'log/%s.log' % datetime.datetime.now()
-        with open(self.filename, 'w') as f:
-            json.dump([], f)
+        
+        self.filename = '%s.log' % datetime.datetime.now().strftime("%Y_%m_%d %H_%M_%S")
+        #go up through controllers,src to log folder
+        base_folder = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+        with open("%s/log/%s"%(base_folder,self.filename), 'w') as f:
+            json.dump({}, f)
 
     def createJSON(self, t, c):
         j = {}
