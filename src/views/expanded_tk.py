@@ -40,10 +40,8 @@ class TkWindowViewer:
         #set to stop for init
         self.PLAY = 0 
         
-        self.file_string = tk.StringVar()
+        
         self.play_stop_button = None
-        self.play_stop_string = tk.StringVar()
-        self.play_stop_string.set("-----")
         #initialize other variables
         self._buildWindow()
         self._buildMenu()
@@ -60,15 +58,15 @@ class TkWindowViewer:
         
     def runActiveVideo(self):
         self.PLAY = not(self.PLAY)
-        self.play_stop_string.set("Play" if self.PLAY else "Stop")
+        self.play_stop_button.configure(text="Play" if self.PLAY else "Stop")
         self.active_vc.runInfinite(self)
     
     def loadVideoFile(self):
         #opens window, selects a file name and configures windows to play it
         filename = askopenfilename()
-        self.file_string.set(filename)
+        self.file_label.configure(text=filename)
         self.active_vc = VideoController(filename)
-        #self.setbuttontext("Play")
+        self.play_stop_button.configure(text="Play")
         pass
         
     def setDisplayImg(self, imgarray=None):
@@ -88,12 +86,16 @@ class TkWindowViewer:
         
     def _buildWindow(self):
         self.video_frame = tk.Frame(master=self.root,width=800,height=450,bg="black")
-        self.video_frame.grid_propagate(0)
         self.video_frame.grid(row=0,column=0)
+        self.video_frame.grid_propagate(0)
+        
+        self.file_label= tk.Label(master=self.video_frame, width=800,height=1,text="--No file selected--")
+        self.file_label.grid(row=0,column=0)
+        
         self.video_label = tk.Label(master = self.video_frame, width=800, height=450,bg="grey",image=None)    
         #initialize a reference to an image file. Needs to be updated each time it is changed
         self.video_label.image = None
-        self.video_label.grid(row=0,column=0)
+        self.video_label.grid(row=0,column=1)
          
         self.log_frame = tk.LabelFrame(master=self.root, text="Log", labelanchor=tk.N, width=400, height=550,bg="white")
         self.log_frame.grid(row=0,column=1,rowspan=2)
@@ -106,7 +108,7 @@ class TkWindowViewer:
         self.play_stop_button = tk.Button(master=self.remote_frame,
                                           command=self.runActiveVideo,
                                           bg="dark grey",
-                                          textvariable=self.play_stop_string,
+                                          text="--select video file--",
                                           anchor=tk.N,
                                           width=800,height=100)
         self.play_stop_button.grid(row=0,column=1, sticky = tk.E)

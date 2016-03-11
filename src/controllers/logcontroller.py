@@ -21,12 +21,15 @@ class LogController:
         if (len(data) >= 100):
             data.pop()
             
-        data.append(self.createJSON(timestamp, count))
+        packet = self.createJSON(timestamp,count)
+        data.append(packet)
 
         data.sort(key=self.getKey, reverse=True)
 
         with open(self.filename, 'w') as f:
             json.dump(data, f)
+        
+        return packet
 
     def getKey(self, item):
         return item['time']
