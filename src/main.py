@@ -27,7 +27,7 @@ def run_gui():
     #maintk.setbuttontext(PLAY_STRING())
     # TODO: Do not hardcode this
             
-   # lc = LogController()
+    lc = LogController()
     maintk.runMainloop()
 
 

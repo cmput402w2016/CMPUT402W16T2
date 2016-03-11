@@ -113,7 +113,8 @@ class TkWindowViewer:
          
     def _buildMenu(self):
         filemenu = tk.Menu(self.menubar, tearoff=0)
-        filemenu.add_command(label="Quit", command=self.root.destroy)
         filemenu.add_command(label="Open...", command=self.loadVideoFile)
+        filemenu.add_separator()
+        filemenu.add_command(label="Quit", command=self.root.destroy)
         self.menubar.add_cascade(label="File", menu=filemenu)
         self.root.config(menu=self.menubar)
