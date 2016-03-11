@@ -5,31 +5,40 @@ import argparse
 from views.expanded_tk import TkWindowViewer
 from controllers.videocontroller import VideoController
 from controllers.logcontroller import LogController
+import datetime
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-v", "--video", type=str, help="path to the video file", required=True)
 args = vars(ap.parse_args())
-
-DEBUG = True
-#RUN_GUI = DEBUG
+RUN_GUI = True
+#===============================================================================
+# if args["video"] is not None:
+#     vc = VideoController(args["video"])
+#     RUN_GUI = False
+#===============================================================================
 
 PLAY_STATUS = True
-PLAY_STRING = "Play" if PLAY_STATUS else "Stop"
 
 def main():
-    global PLAY_STATUS
-    maintk = TkWindowViewer()
-    maintk.play_stop_string.set(PLAY_STRING)
-    # TODO: Do not hardcode this
-    vc = VideoController(args["video"])
-    lc = LogController()
+    """
+    The gui allows instantiation without a video controller. Once the file
+    has been loaded, it calls the video controller's infinite loop when the
+    gui "play" button has been pressed. The gui allows pausing and also 
+    copies the log file into a side window.
+    
+    The CLI ultimately writes the same log file as the gui but will run the file
+    until Ctrl-C is pressed to kill the process. 
+    """
+    run_gui() if RUN_GUI else run_cli()
 
-    (frame, count) = vc.runIteration()
-    maintk.setDisplayImg(frame)
-
-    maintk.setplay(lambda: vc.runInfinite(maintk))
+def run_gui():
+    maintk = TkWindowViewer()            
     maintk.runMainloop()
+
+def run_cli():
+    pass
+
 
 if __name__ == "__main__":
     main()

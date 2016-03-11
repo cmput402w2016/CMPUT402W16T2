@@ -54,7 +54,7 @@ while(1):
     cv2.putText(frame,"Count: %d" % count,(10,20), cv2.FONT_HERSHEY_SIMPLEX, 0.5,(0,0,255),2)
 
     # Show it, if key pressed is 'Esc', exit the loop
-    #cv2.imshow('thresh',thresh)
+    cv2.imshow('thresh',thresh)
     cv2.imshow('frame',frame)
     if cv2.waitKey(33)== 27:
         break

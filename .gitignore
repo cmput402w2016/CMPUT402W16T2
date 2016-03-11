@@ -1,4 +1,5 @@
 *.pyc
+log/*
 videos/*
 .DS_Store
 log/*

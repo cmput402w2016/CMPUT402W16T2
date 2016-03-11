@@ -1,18 +1,17 @@
 import numpy as np
 import cv2
+import Tkinter as tk
+from PIL import Image, ImageTk
 
-cap = cv2.VideoCapture('C:\Users\Troy\Desktop\drop.avi')
+frame = np.zeros((200,200))
+cv2.rectangle(frame,(50,50),(150,150),color=100,thickness=3)
 
-while(True):
-    ret, frame = cap.read()
-    if not ret:
-        print("Could not read frames")
-        break
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    
-    cv2.imshow('frame',gray)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
-cap.release()
-cv2.destroyAllWindows()
+root = tk.Tk()
+b = tk.Button(master=root, text="---Nothing Selected---")
+
+b.pack()
+b.configure(text="Wow")
+
+root.mainloop()
+
     
