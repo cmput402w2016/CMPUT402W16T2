@@ -17,7 +17,9 @@ class VideoController:
             try:
                 (frame,count) = self.runIteration()
                 tkroot.setDisplayImg(frame)
-                tkroot.runUpdate()
+                play = tkroot.runUpdate()
+                if not(play):
+                    break
             except:
                 break
         
@@ -52,9 +54,10 @@ class VideoController:
                 count += 1
     
        
-        # Display the current number of vehicles
-        cv2.putText(frame,"Count: %d" % count,(10,20), cv2.FONT_HERSHEY_SIMPLEX, 0.5,(0,0,255),2)
-
+        # Display the current number of vehicles in red
+        cv2.putText(img=frame,text="Count: %d" % count,org=(10,20),fontFace=cv2.FONT_HERSHEY_SIMPLEX,fontScale= 0.5,color=(0,0,255),thickness=2)
+        cv2.imshow('',frame)
+        
         return(frame, count)
     
     def stopVideo(self):

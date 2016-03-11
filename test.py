@@ -1,18 +1,14 @@
 import numpy as np
 import cv2
 
-cap = cv2.VideoCapture('C:\Users\Troy\Desktop\drop.avi')
+frame = np.zeros((20,20))
+cv2.rectangle(frame,(2,2),(2,2),color=2,thickness=3)
 
-while(True):
-    ret, frame = cap.read()
-    if not ret:
-        print("Could not read frames")
-        break
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    
-    cv2.imshow('frame',gray)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
-cap.release()
+for r in frame:
+    print(r)
+
+cv2.imshow('',frame)
+cv2.waitKey()
 cv2.destroyAllWindows()
+    
     

@@ -10,26 +10,31 @@ from controllers.logcontroller import LogController
 ap = argparse.ArgumentParser()
 ap.add_argument("-v", "--video", type=str, help="path to the video file", required=True)
 args = vars(ap.parse_args())
-
-DEBUG = True
-#RUN_GUI = DEBUG
+RUN_GUI = True
+#===============================================================================
+# if args["video"] is not None:
+#     vc = VideoController(args["video"])
+#     RUN_GUI = False
+#===============================================================================
 
 PLAY_STATUS = True
-PLAY_STRING = "Play" if PLAY_STATUS else "Stop"
+PLAY_STRING = lambda: "Play" if PLAY_STATUS else "Stop"
 
 def main():
-    global PLAY_STATUS
+    run_gui() if RUN_GUI else run_cli()
+
+def run_gui():
     maintk = TkWindowViewer()
-    maintk.play_stop_string.set(PLAY_STRING)
+    #maintk.setbuttontext(PLAY_STRING())
     # TODO: Do not hardcode this
-    vc = VideoController(args["video"])
-    lc = LogController()
-
-    (frame, count) = vc.runIteration()
-    maintk.setDisplayImg(frame)
-
-    maintk.setplay(lambda: vc.runInfinite(maintk))
+            
+   # lc = LogController()
     maintk.runMainloop()
+
+
+def run_cli():
+    pass
+
 
 if __name__ == "__main__":
     main()
