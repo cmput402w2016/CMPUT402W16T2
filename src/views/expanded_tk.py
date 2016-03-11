@@ -55,7 +55,7 @@ class TkWindowViewer:
     def runMainloop(self):
         self.root.mainloop()
     
-    def updateLogText(self, text):
+    def addLog(self, text):
         self.log_listbox.insert(tk.END, text)
     
     def runUpdate(self):

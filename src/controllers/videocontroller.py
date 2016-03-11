@@ -28,9 +28,11 @@ class VideoController:
             try:
                 (frame,count) = self.runIteration()
                 
-                # ToDo: fix this to 
-                #self.lc.writeToLog(str(datetime.datetime.now()),count)
-                
+                # ToDo: fix this to
+                dt = datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S") 
+                self.lc.writeToLog(dt,count)                
+                packet = dt + " "*10 + str(count)
+                tkroot.addLog(packet)
                 
                 tkroot.setDisplayImg(frame)
                 #retrieve pause signal from button press in tk

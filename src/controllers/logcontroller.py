@@ -5,11 +5,12 @@ import os.path
 class LogController:
     def __init__(self):
         
-        self.filename = '%s.log' % datetime.datetime.now().strftime("%Y_%m_%d %H_%M_%S")
+        fname = '%s.log' % datetime.datetime.now().strftime("%Y_%m_%d %H_%M_%S")
         #go up through controllers,src to log folder
         base_folder = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
-        with open("%s/log/%s"%(base_folder,self.filename), 'w') as f:
-            json.dump({}, f)
+        self.filename = "%s/log/%s"%(base_folder,fname)
+        with open(self.filename, 'w') as f:
+            json.dump([], f)
 
     def createJSON(self, t, c):
         j = {}
@@ -26,6 +27,7 @@ class LogController:
             data.pop()
             
         packet = self.createJSON(timestamp,count)
+        #data.append(self.createJSON(timestamp,count))
         data.append(packet)
 
         data.sort(key=self.getKey, reverse=True)
