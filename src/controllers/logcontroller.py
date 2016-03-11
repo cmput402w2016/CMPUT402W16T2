@@ -5,22 +5,28 @@ class LogController:
     def __init__(self):
         self.filename = 'log/%s.log' % datetime.datetime.now()
         with open(self.filename, 'w') as f:
-            json.dump({}, f)
-        self.count = -1
+            json.dump([], f)
 
     def createJSON(self, t, c):
-        data = {}
-        data['time'] = t
-        data['count'] = c
-        return {self.count:data}
+        j = {}
+        j['time'] = t
+        j['count'] = c
+        return j
 
     def writeToLog(self, timestamp, count):
-        self.count += 1
 
         with open(self.filename) as f:
             data = json.load(f)
 
-        data.update(self.createJSON(timestamp, count))
+        if (len(data) >= 100):
+            data.pop()
+            
+        data.append(self.createJSON(timestamp, count))
+
+        data.sort(key=self.getKey, reverse=True)
 
         with open(self.filename, 'w') as f:
             json.dump(data, f)
+
+    def getKey(self, item):
+        return item['time']
