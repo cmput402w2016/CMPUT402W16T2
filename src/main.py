@@ -21,12 +21,19 @@ RUN_GUI = True
 PLAY_STATUS = True
 
 def main():
+    """
+    The gui allows instantiation without a video controller. Once the file
+    has been loaded, it calls the video controller's infinite loop when the
+    gui "play" button has been pressed. The gui allows pausing and also 
+    copies the log file into a side window.
+    
+    The CLI ultimately writes the same log file as the gui but will run the file
+    until Cntrl-C is pressed to kill the process. 
+    """
     run_gui() if RUN_GUI else run_cli()
 
 def run_gui():
-    maintk = TkWindowViewer()
-    #maintk.setbuttontext(PLAY_STRING())
-            
+    maintk = TkWindowViewer()            
     maintk.runMainloop()
 
 def run_cli():
