@@ -9,7 +9,6 @@ try:
 except ImportError:
     import Tkinter as tk
     
-
 WORLD_COORDINATES = "1200x550"
 
     
@@ -61,6 +60,7 @@ class TkWindowViewer:
         
     def runActiveVideo(self):
         self.PLAY = not(self.PLAY)
+        self.play_stop_string.set("Play" if self.PLAY else "Stop")
         self.active_vc.runInfinite(self)
     
     def loadVideoFile(self):

@@ -28,7 +28,6 @@ class VideoController:
     
     def runIteration(self):
         flag,frame = self.capture.read()
-        return (frame, flag)
         if not flag:
             raise Exception("Could not read video")
         

@@ -18,7 +18,6 @@ RUN_GUI = True
 #===============================================================================
 
 PLAY_STATUS = True
-PLAY_STRING = lambda: "Play" if PLAY_STATUS else "Stop"
 
 def main():
     run_gui() if RUN_GUI else run_cli()

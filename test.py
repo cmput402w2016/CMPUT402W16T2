@@ -1,14 +1,21 @@
 import numpy as np
 import cv2
+import Tkinter as tk
+from PIL import Image, ImageTk
 
-frame = np.zeros((20,20))
-cv2.rectangle(frame,(2,2),(2,2),color=2,thickness=3)
+frame = np.zeros((200,200))
+cv2.rectangle(frame,(50,50),(150,150),color=100,thickness=3)
 
-for r in frame:
-    print(r)
+root = tk.Tk()
+label = tk.Label(master=root, image=None)
 
-cv2.imshow('',frame)
-cv2.waitKey()
-cv2.destroyAllWindows()
-    
+label.pack()
+
+im = Image.fromarray(frame)
+imtk = ImageTk.PhotoImage(image=im)
+label.configure(image=imtk)
+label.image = imtk
+
+root.mainloop()
+
     
