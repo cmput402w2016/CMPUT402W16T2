@@ -7,8 +7,8 @@ import numpy
 
 from src.controllers.logcontroller import LogController
 
-
-TIME_INTERVAL = 10
+#the run interval before logging in seconds
+TIME_INTERVAL = 5
 MIN_AREA = 500
 
 class VideoController:
@@ -26,24 +26,41 @@ class VideoController:
         """
         while(True):
             try:
-                (frame,count) = self.runIteration()
+                (timestamp, average) = self.runInterval(tkroot)
                 
-                # ToDo: fix this to
-                dt = datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S") 
-                self.lc.writeToLog(dt,count)                
-                packet = dt + " "*10 + str(count)
+                self.lc.writeToLog(timestamp,average)                
+                packet = timestamp + " "*10 + str(average)
                 tkroot.addLog(packet)
                 
-                tkroot.setDisplayImg(frame)
                 #retrieve pause signal from button press in tk
+                # will only be caught after Time interval elapses
                 play = tkroot.runUpdate()
                 if not(play):
                     break
             except:
                 break
         
-    def runInterval(self):
-        pass
+    def runInterval(self,tkroot):
+        """
+        A gui function that runs a 10 second interval
+        and returns a computed average while updating the gui root
+        """
+        running_count = 0
+        frames_run = 0
+        timeout = time.time() + TIME_INTERVAL
+        while time.time() < timeout:
+            (frame,count) = self.runIteration()
+            #send frame to gui
+            tkroot.setDisplayImg(frame)
+            tkroot.runUpdate()
+
+            running_count += count
+            frames_run += 1
+        #compute average over interval
+        interval_average = running_count // frames_run
+        
+        return(str(timeout), interval_average)
+    
     
     def runIteration(self):
         flag,frame = self.capture.read()

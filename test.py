@@ -1,17 +1,12 @@
-import numpy as np
-import cv2
-import Tkinter as tk
-from PIL import Image, ImageTk
+import time
 
-frame = np.zeros((200,200))
-cv2.rectangle(frame,(50,50),(150,150),color=100,thickness=3)
+timeout_start = time.time()
+interval = 5
 
-root = tk.Tk()
-b = tk.Button(master=root, text="---Nothing Selected---")
+while time.time() < timeout_start + interval:
+    test = 0
+    if test ==5:
+        break
+    test = test - 1
 
-b.pack()
-b.configure(text="Wow")
-
-root.mainloop()
-
-    
+print("Hooray")
