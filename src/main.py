@@ -28,7 +28,7 @@ def main():
     copies the log file into a side window.
     
     The CLI ultimately writes the same log file as the gui but will run the file
-    until Cntrl-C is pressed to kill the process. 
+    until Ctrl-C is pressed to kill the process. 
     """
     run_gui() if RUN_GUI else run_cli()
 

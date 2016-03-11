@@ -15,7 +15,7 @@ class VideoController:
     def __init__(self, video_path):
         self.capture = cv2.VideoCapture(video_path)
         self.running_average = 0
-        #self.lc = LogController()
+        self.lc = LogController()
         self.fgbg = cv2.BackgroundSubtractorMOG()
         
     def runInfinite(self,tkroot):

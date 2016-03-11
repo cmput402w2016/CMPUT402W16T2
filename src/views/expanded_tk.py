@@ -42,6 +42,7 @@ class TkWindowViewer:
         #set to stop for init
         self.PLAY = 0 
         
+        self.LOG_TEXT = None
         
         self.play_stop_button = None
         #initialize other variables
@@ -54,11 +55,26 @@ class TkWindowViewer:
     def runMainloop(self):
         self.root.mainloop()
     
+    def updateLogText(self, text):
+        self.log_listbox.insert(tk.END, text)
+    
     def runUpdate(self):
+        """
+        The update that must be called when inside the video controller
+        so that the two infinite loops of the video and the tkinterface
+        can run concurrently. Also gets the play signal so another button
+        press will pause the frame
+        """
         self.root.update()
         return self.PLAY
         
     def runActiveVideo(self):
+        """
+        Linked to the play button which toggles the kill signal
+        read by video player on update, updates the button text
+        and then runs the infinite loop inside the video
+        controller to play the video into the video_frame
+        """
         self.PLAY = not(self.PLAY)
         #play_var should be inverse to what the status is
         play_var = "Stop" if self.PLAY else "Play"
@@ -66,6 +82,11 @@ class TkWindowViewer:
         self.active_vc.runInfinite(self)
     
     def loadVideoFile(self):
+        """
+        instantiates a new video controller and consequently log controller
+        needs to be separate from runActiveVideo so that the video controller
+        is not recreated accidentally
+        """
         #opens window, selects a file name and configures windows to play it
         filename = askopenfilename()
         #self.file_label.configure(text=filename)
@@ -128,8 +149,18 @@ class TkWindowViewer:
                                         bg="white",
                                         relief=tk.SUNKEN)
         self.log_frame.grid(row=0,column=1,rowspan=3)
-        self.log_frame.grid_propagate(0)
+        self.log_frame.propagate(0)
+        
+        self.log_scrollbar = tk.Scrollbar(master=self.log_frame)
+        self.log_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
 
+        self.log_listbox = tk.Listbox(self.log_frame, height=400,width=300)
+        self.log_listbox.pack()
+        
+                
+        self.log_listbox.config(yscrollcommand=self.log_scrollbar.set)
+        self.log_scrollbar.config(command=self.log_listbox.yview)
+        
          
     def _buildMenu(self):
         filemenu = tk.Menu(self.menubar, tearoff=0)
