@@ -27,7 +27,6 @@ class VideoController:
         self.capture = cv2.VideoCapture(video_path)
         self.lc = LogController()
         self.fgbs = cv2.BackgroundSubtractorMOG()
-        
     def runInfinite(self,tkroot=None):
         """
         A function that can take a TkHelperWindow and send

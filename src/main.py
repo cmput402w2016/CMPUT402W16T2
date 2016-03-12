@@ -39,6 +39,5 @@ def run_cli():
     vc.runInfinite()
     pass
 
-
 if __name__ == "__main__":
     main()
