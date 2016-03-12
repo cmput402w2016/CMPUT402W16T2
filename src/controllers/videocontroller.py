@@ -26,7 +26,8 @@ class VideoController:
         """
         while(True):
             try:
-                (timestamp, average) = self.runInterval(tkroot)
+                average = self.runInterval(tkroot)
+                timestamp = datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S")
                 
                 self.lc.writeToLog(timestamp,average)                
                 packet = timestamp + " "*10 + str(average)
@@ -59,7 +60,7 @@ class VideoController:
         #compute average over interval
         interval_average = running_count // frames_run
         
-        return(str(timeout), interval_average)
+        return interval_average
     
     
     def runIteration(self):
