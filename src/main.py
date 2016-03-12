@@ -9,14 +9,12 @@ import datetime
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
-ap.add_argument("-v", "--video", type=str, help="path to the video file", required=True)
+ap.add_argument("-v", "--video", type=str, help="path to the video file", required=False)
 args = vars(ap.parse_args())
 RUN_GUI = True
-#===============================================================================
-# if args["video"] is not None:
-#     vc = VideoController(args["video"])
-#     RUN_GUI = False
-#===============================================================================
+if args["video"] is not None:
+    RUN_GUI = False
+
 
 PLAY_STATUS = True
 
@@ -38,6 +36,7 @@ def run_gui():
 
 def run_cli():
     vc = VideoController(args["video"])
+    vc.runInfinite()
     pass
 
 

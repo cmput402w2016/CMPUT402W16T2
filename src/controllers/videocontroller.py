@@ -30,18 +30,23 @@ class VideoController:
                 timestamp = datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S")
                 
                 self.lc.writeToLog(timestamp,average)                
-                packet = timestamp + " "*10 + str(average)
-                tkroot.addLog(packet)
-                
-                #retrieve pause signal from button press in tk
-                # will only be caught after Time interval elapses
-                play = tkroot.runUpdate()
-                if not(play):
-                    break
+                packet = "%s          %.1f" %(timestamp, average)
+   
+                if tkroot is not None:             
+                    tkroot.addLog(packet)
+                    #retrieve pause signal from button press in tk
+                    # will only be caught after Time interval elapses
+                    play = tkroot.runUpdate()
+                    if not(play):
+                        break
+                #===============================================================
+                # else:
+                #     print(packet)
+                #===============================================================
             except:
                 break
         
-    def _runInterval(self,tkroot=None):
+    def _runInterval(self,tkroot):
         """
         A gui function that runs a 10 second interval
         and returns a computed average.
@@ -54,7 +59,7 @@ class VideoController:
         running_count = 0
         frames_run = 0
         timeout = time.time() + TIME_INTERVAL
-        if tkroot:      
+        if tkroot is not None:      
             while time.time() < timeout:
                 (frame,count) = self._runIteration(return_frame=True)
                 #send frame to gui
@@ -68,7 +73,7 @@ class VideoController:
                 running_count += count
                 frames_run += 1
         #compute average over interval
-        interval_average = running_count // frames_run
+        interval_average = float(running_count) / float(frames_run)
         
         return interval_average
     
