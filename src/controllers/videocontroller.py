@@ -5,9 +5,8 @@ import cv2
 import imutils
 import numpy
 
-from src.controllers.logcontroller import LogController
-from src.models.frame import Frame
-
+from controllers.logcontroller import LogController
+from models.frame import Frame
 
 #the run interval before logging in seconds
 TIME_INTERVAL = 5
