@@ -37,6 +37,7 @@ def run_gui():
     maintk.runMainloop()
 
 def run_cli():
+    vc = VideoController(args["video"])
     pass
 
 
