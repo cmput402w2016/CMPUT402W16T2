@@ -1,5 +1,5 @@
-projectKey=402T2:sprint2
+projectKey=ualberta.cmput402:team2
 serverUrl=http://localhost:9000
-dashboardUrl=http://localhost:9000/dashboard/index/402T2:sprint2
-ceTaskId=AVNpglAOksBq8fWjLGL0
-ceTaskUrl=http://localhost:9000/api/ce/task?id=AVNpglAOksBq8fWjLGL0
+dashboardUrl=http://localhost:9000/dashboard/index/ualberta.cmput402:team2
+ceTaskId=AVNpdIaBJoVOfv-AQqTk
+ceTaskUrl=http://localhost:9000/api/ce/task?id=AVNpdIaBJoVOfv-AQqTk
