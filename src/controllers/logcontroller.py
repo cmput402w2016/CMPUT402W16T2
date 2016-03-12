@@ -3,6 +3,16 @@ import datetime
 import os.path
 
 class LogController:
+    """
+    One log Controller is instantiated in the constructor of each
+    video controller.
+    
+    The log controller builds JSON packets of data that it appends
+    to a JSON dump it holds a reference to while it is being written.
+    
+    Every time the data is dumped, it is sorted by time so that it
+    remains in the order it was written
+    """
     def __init__(self):
         
         fname = '%s.log' % datetime.datetime.now().strftime("%Y_%m_%d %H_%M_%S")
@@ -19,10 +29,9 @@ class LogController:
         return j
 
     def writeToLog(self, timestamp, count):
-
+        
         with open(self.filename) as f:
             data = json.load(f)
-
         if (len(data) >= 100):
             data.pop()
             

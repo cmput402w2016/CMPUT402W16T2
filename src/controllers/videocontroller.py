@@ -12,6 +12,16 @@ TIME_INTERVAL = 5
 MIN_AREA = 500
 
 class VideoController:
+    """
+    A class for managing a traffic camera feed.
+    Initializing will create itself a log file
+    
+    Provides the function runInfinite that can
+    cycle through the frames of a stationary traffic
+    camera feed and write the average number of cars
+    detected over the Time Interval once at the end
+    of every interval
+    """
     def __init__(self, video_path):
         self.capture = cv2.VideoCapture(video_path)
         self.lc = LogController()

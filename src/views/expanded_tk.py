@@ -14,14 +14,15 @@ WORLD_COORDINATES = "1200x550"
     
 class TkWindowViewer:
     """
-    Manages a TKinter window by packing together opencv operations that cleanly handles 
-    updating a frame inside the main video window, and updating the built-in log file display.
-    Also holds a GUI frame of "remote control" options to select, run, and stop a video file. 
+    Manages a TKinter interface for a traffic camera feed 
     
-    Class variables are used instead of tk's name convention for windows
+    The GUI may be run with no arguments and allows for file selection, and a preview of the 
+    log file being generated. In addition, as the video is being processed, a live frame 
+    frame inside the main video window is shown detailing the detected vehicles by the algorithm.
+    Also permits the video to be paused and resumed inbetween intervals. 
+    
+    Class variables are used instead of tk's widget name convention for windows
     for accessibility, permanence, and simplicity. 
-    
-    Must be called manually in order to write to the log frame
     """
     def __init__(self):
         #initialize root        
@@ -30,7 +31,6 @@ class TkWindowViewer:
         self.root.grid_propagate(0)
         self.menubar = tk.Menu(self.root)
         self.root.config(menu=self.menubar)
-        self.file_label = None
         
         #initialize frames so they can be referenced and packed
         self.video_frame = None #packs nicely into the gui
@@ -38,19 +38,17 @@ class TkWindowViewer:
         
         self.log_frame = None
         self.remote_frame = None
-        #Flag sent through update to kill video infinite loop
-        #set to stop for init
+        #self.PLAY is a flag. If false, kill the video after completing the interval
         self.PLAY = 0 
-        
-        self.LOG_TEXT = None
-        
+                
+        self.file_label = None
         self.play_stop_button = None
+        
         #initialize other variables
+        self.active_vc = None
         self._buildWindow()
         self._buildMenu()
         
-        #inintialize a reference to the active video controller
-        self.active_vc = None
         
     def runMainloop(self):
         self.root.mainloop()
