@@ -1,7 +1,7 @@
 from tkFileDialog import askopenfilename
 
 from PIL import Image, ImageTk
-from src.controllers.videocontroller import VideoController
+from controllers.videocontroller import VideoController
 
 
 try:

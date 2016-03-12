@@ -23,6 +23,7 @@ class Frame():
             area = cv2.contourArea(cnt)
             if area > MIN_AREA:
                 count += 1
+        return count
     
     def drawCountVehicles(self):
         count = 0
