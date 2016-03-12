@@ -22,12 +22,6 @@ class LogController:
         with open(self.filename, 'w') as f:
             json.dump([], f)
 
-    def createJSON(self, t, c):
-        j = {}
-        j['time'] = t
-        j['count'] = c
-        return j
-
     def writeToLog(self, timestamp, count):
         
         with open(self.filename) as f:
@@ -35,16 +29,22 @@ class LogController:
         if (len(data) >= 100):
             data.pop()
             
-        packet = self.createJSON(timestamp,count)
-        #data.append(self.createJSON(timestamp,count))
+        packet = self._createJSON(timestamp,count)
+        #data.append(self._createJSON(timestamp,count))
         data.append(packet)
 
-        data.sort(key=self.getKey, reverse=True)
+        data.sort(key=self._getKey, reverse=True)
 
         with open(self.filename, 'w') as f:
             json.dump(data, f)
         
         return packet
 
-    def getKey(self, item):
+    def _createJSON(self, time, count):
+        packet = {}
+        packet['time'] = time
+        packet['count'] = count
+        return packet
+
+    def _getKey(self, item):
         return item['time']

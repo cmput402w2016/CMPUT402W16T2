@@ -1,11 +1,13 @@
-import time
 import datetime
+import time
 
 import cv2
 import imutils
 import numpy
 
 from src.controllers.logcontroller import LogController
+from src.models.frame import Frame
+
 
 #the run interval before logging in seconds
 TIME_INTERVAL = 5
@@ -25,9 +27,8 @@ class VideoController:
     def __init__(self, video_path):
         self.capture = cv2.VideoCapture(video_path)
         self.lc = LogController()
-        self.fgbg = cv2.BackgroundSubtractorMOG()
+        self.fgbs = cv2.BackgroundSubtractorMOG()
         
- 
     def runInfinite(self,tkroot=None):
         """
         A function that can take a TkHelperWindow and send
@@ -98,34 +99,16 @@ class VideoController:
         The flag return_frame can turned on to return the frame
         with the detected vehicles and a summary count drawn
         """
-        flag,frame = self.capture.read()
+        flag,img = self.capture.read()
         if not flag:
             raise Exception("Could not read video")        
-        frame = imutils.resize(frame, width=500)
-        # This is an alternative way. Simply just use BackgroundSubtractor.
-        thresh = self.fgbg.apply(frame)
-        thresh = cv2.blur(thresh,(11,11)) # blur the frame. this gives better result
-        (contours, _) = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
-            cv2.CHAIN_APPROX_SIMPLE)
-
-        # for each contour if the area is greater the min_area,
-        # treat it as a vehicle. Then draw a rectangle on it.
-        count = 0
-        for cnt in contours:
-            area = cv2.contourArea(cnt)
-            if area > MIN_AREA:
-                if return_frame:
-                    (x, y, w, h) = cv2.boundingRect(cnt)
-                    cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-                count += 1
-        #cv2.imshow('thresh',thresh)
+        frame = Frame(img, self.fgbs)
         
-        if not(return_frame):
-            return count
+        #determine if image should be returned
+        if return_frame:
+            return frame.drawCountVehicles()
         
-        cv2.putText(frame,"Count: %d" % count,(10,20), cv2.FONT_HERSHEY_SIMPLEX, 0.5,(0,0,255),2)   
-        return(frame, count)
-    
+        return frame.countVehicles()  
     
     
     def stopVideo(self):
