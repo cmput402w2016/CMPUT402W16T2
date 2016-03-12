@@ -4,6 +4,13 @@ import cv2
 MIN_AREA = 500
 
 class Frame():
+    """
+    Takes a given image with a background subtractor and provides
+    all the functions required to count the vehicles in the frame
+    for the CLI or drawCountVehicles can be called for the GUI
+    that returns a marked up image with cars highlighted and a count
+    displayed.
+    """
     def __init__(self, img, background_subtractor):
         image = imutils.resize(img, width=500)
         self.image = img
@@ -34,5 +41,4 @@ class Frame():
         thresh = cv2.blur(self.subtracted,(11,11)) # blur the frame. this gives better result
         (contours, _) = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
             cv2.CHAIN_APPROX_SIMPLE)
-
         return contours
