@@ -38,7 +38,7 @@ class Frame():
         return (self.image, count)
     
     def _getContours(self):
-        # This is an alternative way. Simply just use BackgroundSubtractor.
+        # Applies contouring to subtracted image to identify areas of interest
         thresh = cv2.blur(self.subtracted,(11,11)) # blur the frame. this gives better result
         (contours, _) = cv2.findContours(thresh.copy(), cv2.RETR_EXTERNAL,
             cv2.CHAIN_APPROX_SIMPLE)

@@ -3,3 +3,5 @@ log/*
 videos/*
 .DS_Store
 log/*
+*.pptx
+*.avi
