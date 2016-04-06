@@ -47,30 +47,20 @@ class LogController:
         for k,v in averages.iteritems():
             packet = self._createJSON(timestamp, k, v)
             if ( self._postToServer(packet) ):
-                packet['success'] = 1
+                packet['success'] = settings.SUCCESS
             else:
-                packet['success'] = 0
+                packet['success'] = settings.FAIL
             data.append(packet)
     
-            data.sort(key=self._getKey, reverse=True)
-            
+            data.sort(key=self._getKey, reverse=True)       
 
-            # re-post the most recent 5 packets if previously failed to post
-            for i in range(0, min(5, len(data))):
-                # logger.info(data[i])
-                if data[i]['success'] == 0:
-                    if ( self._postToServer(data[i]) ):
-                        data[i]['success'] = 1
-
-        packet = self._createJSON(timestamp,count)
-        if ( self._postToServer(packet) ):
-            packet['success'] = 1
-        else:
-            packet['success'] = 0
-        data.append(packet)
-
-        data.sort(key=self._getKey, reverse=True)
-
+        
+        # re-post the most recent 5 packets if previously failed to post
+        for i in range(0, min(5, len(data))):
+            # logger.info(data[i])
+            if data[i]['success'] == settings.FAIL:
+                if ( self._postToServer(data[i]) ):
+                    data[i]['success'] = settings.SUCCESS
 
         with open(self.filename, 'w') as f:
             json.dump(data, f)
