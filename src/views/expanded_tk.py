@@ -24,8 +24,9 @@ class TkWindowViewer:
     Class variables are used instead of tk's widget name convention for windows
     for accessibility, permanence, and simplicity. 
     """
-    def __init__(self):
+    def __init__(self, world):
         #initialize root        
+        self.world = world
         self.root = tk.Tk()
         self.root.geometry(WORLD_COORDINATES)
         self.root.grid_propagate(0)
@@ -78,6 +79,7 @@ class TkWindowViewer:
         play_var = "Stop" if self.PLAY else "Play"
         self.play_stop_button.configure(text=play_var)
         self.active_vc.runInfinite(self)
+        self.addLog(self.world)
     
     def loadVideoFile(self):
         """
@@ -88,7 +90,7 @@ class TkWindowViewer:
         #opens window, selects a file name and configures windows to play it
         filename = askopenfilename()
         #self.file_label.configure(text=filename)
-        self.active_vc = VideoController(filename)
+        self.active_vc = VideoController(filename, self.world)
         self.file_label.configure(text=filename)
         self.play_stop_button.configure(text="Play")
         

@@ -1,12 +1,14 @@
 import datetime
 import time
-
+import math
 import cv2
 import imutils
 import numpy
 
 from controllers.logcontroller import LogController
 from models.frame import Frame
+import settings
+
 
 #the run interval before logging in seconds
 TIME_INTERVAL = 5
@@ -23,71 +25,79 @@ class VideoController:
     detected over the Time Interval once at the end
     of every interval
     """
-    def __init__(self, video_path):
+    def __init__(self, video_path, world):
+        self.world = world
         self.capture = cv2.VideoCapture(video_path)
-        self.lc = LogController()
-        self.fgbs = cv2.BackgroundSubtractorMOG()
+        self.lc = LogController(world)
+        self.fgbs = cv2.BackgroundSubtractorMOG2(history=1000,
+                                   varThreshold = 500,
+                                   bShadowDetection = False)
+        self.detector = self._buildBlobDetector()
+        
     def runInfinite(self,tkroot=None):
         """
-        A function that can take a TkHelperWindow and send
-        it processed frames to display. The infinite loop is
-        killed by the play button within the gui or EOF 
+        Runs the video in sets of intervals computing and logging averages
+        after TIME_INTERVAL seconds.
         """
         while(True):
             try:
-                average = self._runInterval(tkroot)
+                averages = self._runInterval()
                 timestamp = datetime.datetime.now().strftime("%Y/%m/%d %H:%M:%S")
+            
+                if not settings.DEBUG:    
+                    self.lc.writeToLog(timestamp,averages)                
                 
-                self.lc.writeToLog(timestamp,average)                
-                packet = "%s          %.1f" %(timestamp, average)
    
-                if tkroot is not None:             
-                    tkroot.addLog(packet)
-                    #retrieve pause signal from button press in tk
-                    # will only be caught after Time interval elapses
-                    play = tkroot.runUpdate()
-                    if not(play):
-                        break
                 #===============================================================
-                # else:
-                #     print(packet)
+                # if tkroot is not None:             
+                #     tkroot.addLog(packet)
+                #     #retrieve pause signal from button press in tk
+                #     # will only be caught after Time interval elapses
+                #     play = tkroot.runUpdate()
+                #     if not(play):
+                #         break
                 #===============================================================
+
             except:
                 break
         
-    def _runInterval(self,tkroot):
+    def _runInterval(self):
         """
-        A gui function that runs a 10 second interval
-        and returns a computed average.
-        
-        Supplying tkroot will run calls to update the picture
-        shown inside tkroot, an instance of TkWindowViewer
-        Leaving it as null will just return the average which
-        is faster and uses less space in memory
-        """
-        running_count = 0
+        A gui function that runs a TIME_INTERVAL interval
+        and returns a dictionary using the same keys as
+        the command args in --world to provide the average
+        count of traffic detected moving in the world directions
+        """    
+
         frames_run = 0
-        timeout = time.time() + TIME_INTERVAL
-        if tkroot is not None:      
-            while time.time() < timeout:
-                (frame,count) = self._runIteration(return_frame=True)
-                #send frame to gui
-                tkroot.setDisplayImg(frame)
-                tkroot.runUpdate()
-                running_count += count
-                frames_run += 1
-        else:
-            while time.time() < timeout:
-                count = self._runIteration()
-                running_count += count
-                frames_run += 1
-        #compute average over interval
-        interval_average = float(running_count) / float(frames_run)
+        #reinitialize the traffic counts
+        averages = {}
+        for k in self.world.keys():
+            averages[k] = 0
+                
+        previous_keypoints = None
         
-        return interval_average
+        timeout = time.time() + TIME_INTERVAL
+
+        while time.time() < timeout:
+            iterDict = self._runIteration(previous_keypoints)
+            
+            
+            previous_keypoints = iterDict['keypoints']
+            averages_dict = iterDict['averages']
+            frames_run += 1    
+            for k,v in averages_dict.iteritems():
+                averages[k] += v
+           
+        
+        #compute average over interval
+        for k in self.world.keys():
+            averages[k] = math.ceil(averages[k] / float(frames_run))
+        
+        return averages
     
     
-    def _runIteration(self, return_frame=False):
+    def _runIteration(self, previous_keypoints, return_frame=False):
         """
         The function of the controller that processes
         the next frame of the video and calculates the number
@@ -97,17 +107,35 @@ class VideoController:
         The flag return_frame can turned on to return the frame
         with the detected vehicles and a summary count drawn
         """
+
+        frame = self._getFrame()
+
+        keypoints, averages = frame.analyzeFrame(previous_keypoints, self.world)  
+        
+        return {'keypoints':keypoints, 'averages':averages}
+    
+    
+    def _getFrame(self):
         flag,img = self.capture.read()
         if not flag:
             raise Exception("Could not read video")        
-        frame = Frame(img, self.fgbs)
-        
-        #determine if image should be returned
-        if return_frame:
-            return frame.drawCountVehicles()
-        
-        return frame.countVehicles()  
+        frame = Frame(img, self.fgbs, self.detector)
+        return frame
     
+    def _buildBlobDetector(self):
+        """
+        creates a blob detector that can be used to identify the relevant
+        blobs of a background subtracted image. Algorithm can be improved
+        by supplying a truly empty frame to better remove noise.
+        """
+        params = cv2.SimpleBlobDetector_Params()
+        
+        params.filterByColor = True
+        params.blobColor = 255
+        params.filterByConvexity = True
+        params.minConvexity = 0.87
+        
+        return cv2.SimpleBlobDetector(params)
     
     def stopVideo(self):
         self.capture.release()
