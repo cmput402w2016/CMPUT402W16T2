@@ -1,7 +1,11 @@
-import imutils
+import math
+
 import cv2
+import imutils
+
 import numpy as np
 import settings
+
 
 MIN_AREA = 500
 
@@ -88,7 +92,7 @@ class Frame():
                     angle = self.angle_between(old_point,p0)
                     sortInWorld(angle, world)
                     lines.append([(int(old_point[0]),int(old_point[1])),
-                                  (int(p0[0]), int(p0[1]))])
+                                  (int(p0[0]), int(p0[1])), round(angle, 0)])
                 else:
                     key = freeze_keys[key_cycler]
                     averages_dict[key] += 1
@@ -101,6 +105,8 @@ class Frame():
             #=======================================================================
             for l in lines:
                 cv2.line(im_with_keypoints, l[0],l[1], (0,255,0), 3 )
+                #write the angle next to the end point of the line
+                cv2.putText(im_with_keypoints, str(l[2]), l[1], cv2.FONT_HERSHEY_SIMPLEX, 0.5, (100,100,100),2)
             
             
             cv2.imshow("keypoints", im_with_keypoints)
@@ -128,9 +134,11 @@ class Frame():
     
     def angle_between(self, p1, p2):
         """
-        calculates the trajectory of 2 points
+        calculates the trajectory of 2 points from p1 to p2
+        recalculates with 0 as it is on unit circle and in deg
         """
-        ang1 = np.arctan2(*p1[::-1])
-        ang2 = np.arctan2(*p2[::-1])
-        trajectory =  np.rad2deg((ang1 - ang2) % (2 * np.pi))
+        deltax = p2[1] - p1[1]
+        deltay = p2[0] - p1[0]
+        trajectory = math.atan2(deltay, deltax) * 180/np.pi
+        trajectory = (trajectory - 90) % 360
         return trajectory

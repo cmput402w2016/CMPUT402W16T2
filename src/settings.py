@@ -1,5 +1,5 @@
 
-DEBUG = False
+DEBUG = True
 POST_URL = "http://199.116.235.225:8000/traffic"
 
 DATE_PATTERN = '%Y/%m/%d %H:%M:%S'
