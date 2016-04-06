@@ -54,6 +54,24 @@ class LogController:
     
             data.sort(key=self._getKey, reverse=True)
             
+
+            # re-post the most recent 5 packets if previously failed to post
+            for i in range(0, min(5, len(data))):
+                # logger.info(data[i])
+                if data[i]['success'] == 0:
+                    if ( self._postToServer(data[i]) ):
+                        data[i]['success'] = 1
+
+        packet = self._createJSON(timestamp,count)
+        if ( self._postToServer(packet) ):
+            packet['success'] = 1
+        else:
+            packet['success'] = 0
+        data.append(packet)
+
+        data.sort(key=self._getKey, reverse=True)
+
+
         with open(self.filename, 'w') as f:
             json.dump(data, f)
 
@@ -67,17 +85,22 @@ class LogController:
         epoch = int(time.mktime(time.strptime(packet['time'], pattern)))
         url = settings.POST_URL
         data = {}
+
          
         data['from'] = packet['from']
         data['to'] = packet['to']
         data['key'] = "TESTING_POST"
+
         data['timestamp'] = epoch
         data['value'] = packet['count']
-        r = requests.post(url, json=data)
-        # logger.info(r.json())
-        if (r.status_code == 201):
-            return True
-        else:
+        try:
+            r = requests.post(url, json=data, timeout=5)
+            if (r.status_code == 201):
+                return True
+            else:
+                return False
+        except requests.exceptions.RequestException as e:
+            logger.info(e)
             return False
 
     def _createJSON(self, time, key, count):
