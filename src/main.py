@@ -25,25 +25,17 @@ RUN_GUI = True
 if args["video"] is not None:
     RUN_GUI = False
 
-
-PLAY_STATUS = True
-
 def main():
     """
-    The gui allows instantiation without a video file being specified. Once the file
-    has been loaded, it calls the video controller's infinite loop once the
-    gui "play" button has been pressed. The gui allows pausing and also 
-    displays the current log file in a side window.
-    
     The CLI ultimately writes the same log file as the gui and sends the same posts to
     team 1's server, but will run faster, and use less memory as the entire gui interface
-    is circumvented 
+    is circumvented
+    
+    EDIT: As of sprint 3 the GUI has been deprecated. A debug mode has been implemented
+    that allows frame by frame images to display which will show the keypoints and trajectories.
+     
     """
-    run_gui() if RUN_GUI else run_cli()
-
-def run_gui():
-    maintk = TkWindowViewer(world)            
-    maintk.runMainloop()
+    run_cli()
 
 def run_cli():
     vc = VideoController(args["video"], world)

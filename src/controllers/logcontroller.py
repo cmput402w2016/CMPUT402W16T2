@@ -37,7 +37,11 @@ class LogController:
             raise Exception("could not resolve log file path name")
             
     def writeToLog(self, timestamp, averages):
-        
+        """
+        Writes the most recent data using the timestamp and averages passed in.
+        Additionally, it will check the 5 most recent packets attempted to be
+        posted to the server. Any that have failed are attempted again.
+        """
         with open(self.filename) as f:
             data = json.load(f)
         if (len(data) >= 100):

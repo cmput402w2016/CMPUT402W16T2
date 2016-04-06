@@ -22,7 +22,7 @@ class Frame():
         self.image = img
         self.fgbs = background_subtractor
         self.detector = blob_detector
-        self.subtracted = self._subtractimage()
+        self.subtracted = self._subtractImage()
         
    
     def _subtractImage(self):
@@ -41,11 +41,24 @@ class Frame():
         return sub
     
     def analyzeFrame(self, old_keypoints, world):
+        """
+        The primary class function. Given the parsed world coordinates from the command line,
+        the old_keypoints that the previous frame passed to run_Interval, and the new image,
+        the function first detects new keypoints. Then for each point it determines if there
+        is another pixel within the proximity that it belongs to the same vehicle. If it
+        can detect such a point, it calculates the trajectory, and increments the world_direction
+        count accordingly. Keypoints that cannot be trajectoried are evenly distributed among
+        the average counts so that the overall counts can still be meaningfully divided by the
+        number of frames.
+        """
         averages_dict = {}
         for k in world.keys():
             averages_dict[k] = 0
         
         def sortInWorld(angle, world):
+            """
+            given an angle, decomposes the world coordinates to increment the proper value of the dictionary
+            """
             for k in world.keys():
                 anglerange = k.replace('(',"").replace(")","").\
                     replace("'","").split(',')
@@ -114,6 +127,9 @@ class Frame():
         return p
     
     def angle_between(self, p1, p2):
+        """
+        calculates the trajectory of 2 points
+        """
         ang1 = np.arctan2(*p1[::-1])
         ang2 = np.arctan2(*p2[::-1])
         trajectory =  np.rad2deg((ang1 - ang2) % (2 * np.pi))
