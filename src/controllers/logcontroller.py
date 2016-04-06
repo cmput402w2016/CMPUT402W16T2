@@ -36,6 +36,13 @@ class LogController:
         if (len(data) >= 100):
             data.pop()
 
+        # re-post the most recent 5 packets if previously failed to post
+        for i in range(0, min(5, len(data))):
+            # logger.info(data[i])
+            if data[i]['success'] == 0:
+                if ( self._postToServer(data[i]) ):
+                    data[i]['success'] = 1
+
         packet = self._createJSON(timestamp,count)
         if ( self._postToServer(packet) ):
             packet['success'] = 1
@@ -56,16 +63,19 @@ class LogController:
         epoch = int(time.mktime(time.strptime(packet['time'], pattern)))
         url = "http://199.116.235.225:8000/traffic"
         data = {}
-        data['from'] = "c3x2wb3240dw"
-        data['to'] = "c3x2wb331v77"
-        data['key'] = "TESTING_POST"
+        data['from'] = "c3x2wb3240dw"   # TODO
+        data['to'] = "c3x2wb331v77"     # TODO
+        data['key'] = "TESTING_POST"    # TODO
         data['timestamp'] = epoch
         data['value'] = packet['count']
-        r = requests.post(url, json=data)
-        # logger.info(r.json())
-        if (r.status_code == 201):
-            return True
-        else:
+        try:
+            r = requests.post(url, json=data, timeout=5)
+            if (r.status_code == 201):
+                return True
+            else:
+                return False
+        except requests.exceptions.RequestException as e:
+            logger.info(e)
             return False
 
     def _createJSON(self, time, count):
