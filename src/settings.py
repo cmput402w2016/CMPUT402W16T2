@@ -1,4 +1,4 @@
-from test.test_deque import fail
+
 DEBUG = False
 POST_URL = "http://199.116.235.225:8000/traffic"
 
