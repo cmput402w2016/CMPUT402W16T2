@@ -65,7 +65,6 @@ class LogController:
         with open(self.filename, 'w') as f:
             json.dump(data, f)
 
-        return packet
 
     def _postToServer(self, packet):
         """

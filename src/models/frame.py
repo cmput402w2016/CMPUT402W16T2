@@ -25,7 +25,7 @@ class Frame():
         self.subtracted = self._subtractimage()
         
    
-    def _subtractimage(self):
+    def _subtractImage(self):
         """
         Increases contrast with histogram equalization and then applies
         the background subtractor using a heavy blurring filter to merge vehicles
